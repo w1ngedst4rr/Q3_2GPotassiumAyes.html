@@ -60,59 +60,47 @@ input:focus, select:focus, textarea:focus {
 </style>
 
 <script>
-function confirmSubmit() {
-    return confirm("Are you sure you want to submit this application?");
-}
+<script>
 
-function confirmReset() {
-    return confirm("Are you sure you want to reset all fields?");
-}
+function saveSignup(event){
 
-function checkEmpty(element) {
-    if (element.value.trim() === "") {
-        element.classList.add("error");
-    } else {
-        element.classList.remove("error");
-    }
-}
-
-function saveSignup(event) {
     event.preventDefault();
 
-    if (!confirmSubmit()) return;
+    if(!confirm("Are you sure you want to submit this application?")){
+        return;
+    }
 
     let signup = {
         id: document.querySelector("[name=studentID]").value,
         fullname: document.querySelector("[name=fullName]").value,
-        birthday: document.querySelector("[name=birthday]").value,
         email: document.querySelector("[name=email]").value,
         mobile: document.querySelector("[name=mobile]").value,
         grade: document.querySelector("[name=gradeLevel]").value,
         status: document.querySelector("input[name=status]:checked").value,
-        club: document.querySelector("[name=club]").value,
-        reason: document.querySelector("[name=reason]").value
+        club: document.querySelector("[name=club]").value
     };
 
-    let signups = localStorage.getItem("signups");
+    let records = localStorage.getItem("signups");
 
-    if (signups == null) {
-        signups = [];
+    if(records === null){
+        records = [];
     } else {
-        signups = JSON.parse(signups);
+        records = JSON.parse(records);
     }
 
-    signups.push(signup);
+    records.push(signup);
 
-    localStorage.setItem("signups", JSON.stringify(signups));
+    localStorage.setItem("signups", JSON.stringify(records));
 
-    alert("Signup Saved!");
+    alert("Saved Successfully!");
 
     document.querySelector("form").reset();
 }
 
-function viewSignups() {
+function viewSignups(){
     window.location.href = "viewSignUps.html";
 }
+    
 </script>
 </head>
 
@@ -188,9 +176,17 @@ Why do you want to join:
 </fieldset>
 
 <div class="buttons">
+
 <input type="submit" value="Submit">
 <input type="reset" value="Reset">
 <input type="button" value="View Signups" onclick="viewSignups()">
+
+    <div class="buttons">
+    <input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+    <input type="button" value="View Signups">
+</div>
+
 </div>
 
 </form>
