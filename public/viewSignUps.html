@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Show List of Students Who Signed-Up</title>
+
+<style>
+body{
+    font-family: Arial;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#00008b;
+    color:white;
+}
+
+th,td{
+    border:1px solid black;
+    padding:8px;
+}
+
+tr:nth-child(even){
+    background:#00008b;
+    color:white;
+}
+
+select{
+    padding:10px;
+    font-size:16px;
+}
+</style>
+
+<script>
+
+window.onload = function(){
+    displayData("ALL");
+}
+
+function displayData(selectedClub){
+
+    let data = localStorage.getItem("signups");
+    let tableArea = document.getElementById("tableArea");
+    let totalArea = document.getElementById("total");
+
+    if(data === null){
+        tableArea.innerHTML = "No Sign Ups Available";
+        totalArea.innerHTML = "Total Signup : 0";
+        return;
+    }
+
+    let signups = JSON.parse(data);
+    let result = [];
+
+    if(selectedClub === "ALL"){
+        result = signups;
+    }
+    else{
+        result = signups.filter(s => s.club === selectedClub);
+    }
+
+    if(result.length === 0){
+        tableArea.innerHTML = "No Sign Ups for the club";
+        totalArea.innerHTML = "Total Signup : 0";
+        return;
+    }
+
+    let html = `
+    <table>
+    <tr>
+        <th>Club</th>
+        <th>ID</th>
+        <th>Fullname</th>
+        <th>Grade</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Intern|Extern</th>
+    </tr>
+    `;
+
+    result.forEach(s=>{
+        html+=`
+        <tr>
+            <td>${s.club}</td>
+            <td>${s.id}</td>
+            <td>${s.fullname}</td>
+            <td>${s.grade}</td>
+            <td>${s.email}</td>
+            <td>${s.mobile}</td>
+            <td>${s.status}</td>
+        </tr>
+        `;
+    });
+
+    html+="</table>";
+
+    tableArea.innerHTML = html;
+    totalArea.innerHTML = "Total Signup : " + result.length;
+}
+
+function changeClub(){
+    let club = document.getElementById("clubSelect").value;
+    displayData(club);
+}
+
+</script>
+</head>
+
+<body>
+
+<h1>Show List of Students Who Signed-Up</h1>
+<p>by AL Mendoza</p>
+
+<a href="signup.html">Back to Signup</a>
+<br><br>
+
+Select Your Club
+<select id="clubSelect" onchange="changeClub()">
+    <option value="ALL">-- select an option --</option>
+    <option value="Bake Club">Bake Club</option>
+    <option value="Computron">Computron</option>
+    <option value="Himig Agham">Himig Agham</option>
+</select>
+
+<p id="total">Total Signup : </p>
+
+<div id="tableArea"></div>
+
+</body>
+</html>
